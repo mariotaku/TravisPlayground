@@ -13,8 +13,6 @@ android:
     - android-22
 
     # Additional components
-    - extra-google-google_play_services
-    - extra-google-m2repository
     - extra-android-m2repository
 
     # Specify at least one system image,
@@ -23,3 +21,5 @@ android:
     # - sys-img-x86-android-17
 
 script: ./gradlew build signing
+
+after_success: ./scripts/travis_upload_release_to_github.sh
