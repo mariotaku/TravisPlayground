@@ -1,3 +1,5 @@
+import org.apache.commons.codec.binary.Base64
+
 apply plugin: 'com.android.application'
 
 android {
@@ -15,6 +17,31 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    signingConfigs {
+
+        release {
+            String keyStoreBase64 = System.getenv('RELEASE_KEYSTORE_BASE64')
+            if (keyStoreBase64 == null) return;
+            File tempKeyStoreFile = File.createTempFile("tmp_ks_", ".jks")
+            FileOutputStream fos = null
+            try {
+                fos = new FileOutputStream(tempKeyStoreFile)
+                fos.write(Base64.decodeBase64(keyStoreBase64))
+                fos.flush()
+            } catch (IOException e) {
+                e.printStackTrace()
+            } finally {
+                if (fos != null) {
+                    fos.close()
+                }
+            }
+
+            storeFile tempKeyStoreFile
+            storePassword System.getenv('RELEASE_KEYSTORE_PASSWORD')
+            keyAlias System.getenv('RELEASE_KEYSTORE_KEY_ALIAS')
+            keyPassword System.getenv('RELEASE_KEYSTORE_KEY_PASSWORD')
         }
     }
 }
