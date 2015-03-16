@@ -32,8 +32,8 @@ android {
 
 def decodeKeyStoreFileFromBase64Env(String name) {
     String keyStoreBase64 = System.getenv(name)
-    if (keyStoreBase64 == null) return null;
-    File tempKeyStoreFile = File.createTempFile("tmp_ks_", ".jks", rootProject.buildDir)
+    if (keyStoreBase64 == null) return null
+    File tempKeyStoreFile = File.createTempFile("tmp_ks_", ".jks")
     FileOutputStream fos = null
     try {
         fos = new FileOutputStream(tempKeyStoreFile)
