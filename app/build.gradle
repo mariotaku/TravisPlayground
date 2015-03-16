@@ -46,7 +46,6 @@ def decodeKeyStoreFileFromBase64Env(String name) {
             fos.close()
         }
     }
-    System.out.println(tempKeyStoreFile)
     return tempKeyStoreFile
 }
 
