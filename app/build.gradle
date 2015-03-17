@@ -50,6 +50,7 @@ def decodeKeyStoreFileFromBase64Env(String name) {
             fos.close()
         }
     }
+    printf('File infomation: length=%d\n', tempKeyStoreFile.length())
     final FileInputStream is = new FileInputStream(tempKeyStoreFile)
     String calculatedMd5 = DigestUtils.md5Hex(is)
     String keyStoreMd5 = System.getenv(name + "_MD5")
