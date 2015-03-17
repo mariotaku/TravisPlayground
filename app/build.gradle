@@ -1,4 +1,5 @@
 import org.apache.commons.codec.binary.Base64
+import org.apache.commons.codec.digest.DigestUtils
 
 apply plugin: 'com.android.application'
 
@@ -49,6 +50,10 @@ def decodeKeyStoreFileFromBase64Env(String name) {
             fos.close()
         }
     }
+    final FileInputStream is = new FileInputStream(tempKeyStoreFile)
+    String calculatedMd5 = DigestUtils.md5Hex(is)
+//    String keyStoreMd5 = System.getenv(name + "_MD5")
+    printf("MD5 of created file is %s\n", calculatedMd5)
     return tempKeyStoreFile
 }
 
