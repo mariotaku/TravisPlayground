@@ -1,7 +1,5 @@
-import org.apache.commons.codec.binary.Base64
-import org.apache.commons.codec.digest.DigestUtils
-
 apply plugin: 'com.android.application'
+apply from: rootProject.file('signing.gradle')
 
 android {
     compileSdkVersion 22
@@ -14,43 +12,12 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    signingConfigs {
-        release {
-            storeFile decodeKeyStoreFileFromBase64Env('RELEASE_KEYSTORE_BASE64')
-            storePassword System.getenv('RELEASE_KEYSTORE_PASSWORD')
-            keyAlias System.getenv('RELEASE_KEYSTORE_KEY_ALIAS')
-            keyPassword System.getenv('RELEASE_KEYSTORE_KEY_PASSWORD')
-        }
-    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            if (signingConfigs.release.storeFile != null) {
-                signingConfig signingConfigs.release
-            }
         }
     }
-}
-
-def decodeKeyStoreFileFromBase64Env(String name) {
-    String keyStoreBase64 = System.getenv(name)
-    if (keyStoreBase64 == null) return null
-    File tempKeyStoreFile = File.createTempFile("tmp_ks_", ".jks", File.createTempDir())
-    FileOutputStream fos = null
-    try {
-        fos = new FileOutputStream(tempKeyStoreFile)
-        fos.write(Base64.decodeBase64(keyStoreBase64))
-        fos.flush()
-    } finally {
-        if (fos != null) {
-            fos.close()
-        }
-    }
-    final FileInputStream is = new FileInputStream(tempKeyStoreFile)
-    printf("MD5 of created file is %s\n", DigestUtils.md5Hex(is))
-    is.close()
-    return tempKeyStoreFile
 }
 
 dependencies {
