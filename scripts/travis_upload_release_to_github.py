@@ -1,14 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
-
-__author__ = 'mariotaku'
-git_https_url_prefix = 'https://github.com/'
-git_ssh_url_prefix = 'git@github.com:'
-git_file_suffix = '.git'
-github_header_accept = 'application/vnd.github.v3+json'
-github_header_user_agent = 'TravisUploader/0.1'
+from __future__ import print_function
 
 import os
+import sys
 import httplib
 import urllib
 import urlparse
@@ -18,6 +13,13 @@ import re
 from os import getenv
 from subprocess import check_output
 from subprocess import CalledProcessError
+
+__author__ = 'mariotaku'
+git_https_url_prefix = 'https://github.com/'
+git_ssh_url_prefix = 'git@github.com:'
+git_file_suffix = '.git'
+github_header_accept = 'application/vnd.github.v3+json'
+github_header_user_agent = 'TravisUploader/0.1'
 
 DEVNULL = open(os.devnull, 'w')
 repo_url = None
@@ -35,7 +37,7 @@ elif repo_url.startswith(git_https_url_prefix):
     user_repo_name = repo_url[len(git_https_url_prefix):]
 
 if not user_repo_name:
-    print('Not a github repo, abort')
+    print('Not a github repo, abort', file=sys.stderr)
     exit(0)
 
 if user_repo_name.endswith(git_file_suffix):
@@ -46,13 +48,13 @@ try:
     current_tag = check_output(['git', 'describe', '--tags', '--exact-match', '--abbrev=0'],
                                stderr=DEVNULL).splitlines()[0]
 except CalledProcessError:
-    print('This commit doesn\'t have tag, abort')
+    print('This commit doesn\'t have tag, abort', file=sys.stderr)
     exit(0)
 
 github_access_token = getenv('GITHUB_ACCESS_TOKEN')
 
 if not github_access_token:
-    print('No access token given, abort')
+    print('No access token given, abort', file=sys.stderr)
     exit(0)
 
 github_authorization_header = "token %s" % github_access_token
