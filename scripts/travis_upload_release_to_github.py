@@ -47,6 +47,7 @@ if user_repo_name.endswith(git_file_suffix):
     user_repo_name = user_repo_name[:-len(git_file_suffix)]
 
 current_tag = None
+current_tag_body = None
 try:
     current_tag = check_output(['git', 'describe', '--tags', '--exact-match', '--abbrev=0'],
                                stderr=DEVNULL).splitlines()[0]
