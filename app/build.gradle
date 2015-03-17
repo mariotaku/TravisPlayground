@@ -52,8 +52,14 @@ def decodeKeyStoreFileFromBase64Env(String name) {
     }
     final FileInputStream is = new FileInputStream(tempKeyStoreFile)
     String calculatedMd5 = DigestUtils.md5Hex(is)
-//    String keyStoreMd5 = System.getenv(name + "_MD5")
-    printf("MD5 of created file is %s\n", calculatedMd5)
+    String keyStoreMd5 = System.getenv(name + "_MD5")
+    if (keyStoreMd5 != null) {
+        if (keyStoreMd5.equals(calculatedMd5)) {
+            throw new RuntimeException('MD5 mismatch. calculated ' + calculatedMd5 + ', provided ' + keyStoreMd5)
+        }
+    } else {
+        printf("MD5 of created file is %s\n", calculatedMd5)
+    }
     return tempKeyStoreFile
 }
 
