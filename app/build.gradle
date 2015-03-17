@@ -54,7 +54,7 @@ def decodeKeyStoreFileFromBase64Env(String name) {
     String calculatedMd5 = DigestUtils.md5Hex(is)
     String keyStoreMd5 = System.getenv(name + "_MD5")
     if (keyStoreMd5 != null) {
-        if (keyStoreMd5.equals(calculatedMd5)) {
+        if (!keyStoreMd5.equals(calculatedMd5)) {
             throw new RuntimeException('MD5 mismatch. calculated ' + calculatedMd5 + ', provided ' + keyStoreMd5)
         }
     } else {
