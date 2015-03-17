@@ -17,6 +17,7 @@ from subprocess import CalledProcessError
 __author__ = 'mariotaku'
 git_https_url_prefix = 'https://github.com/'
 git_ssh_url_prefix = 'git@github.com:'
+git_git_url_prefix = 'git://github.com/'
 git_file_suffix = '.git'
 github_header_accept = 'application/vnd.github.v3+json'
 github_header_user_agent = 'TravisUploader/0.1'
@@ -35,6 +36,8 @@ if repo_url.startswith(git_ssh_url_prefix):
     user_repo_name = repo_url[len(git_ssh_url_prefix):]
 elif repo_url.startswith(git_https_url_prefix):
     user_repo_name = repo_url[len(git_https_url_prefix):]
+elif repo_url.startswith(git_git_url_prefix):
+    user_repo_name = repo_url[len(git_git_url_prefix):]
 
 if not user_repo_name:
     print('Not a github repo (%s), abort' % repo_url, file=sys.stderr)
