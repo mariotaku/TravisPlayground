@@ -54,6 +54,8 @@ except CalledProcessError:
     print('This commit doesn\'t have tag, abort', file=sys.stderr)
     exit(0)
 
+print(os.environ)
+
 github_access_token = getenv('GITHUB_ACCESS_TOKEN')
 
 if not github_access_token:
