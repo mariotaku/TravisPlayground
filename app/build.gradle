@@ -54,5 +54,4 @@ def decodeKeyStoreFileFromBase64Env(String name) {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
