@@ -6,6 +6,7 @@ git_https_url_prefix = 'https://github.com/'
 git_ssh_url_prefix = 'git@github.com:'
 git_file_suffix = '.git'
 github_header_accept = 'application/vnd.github.v3+json'
+github_header_user_agent = 'TravisUploader/0.1'
 
 import os
 import httplib
@@ -40,7 +41,6 @@ if not user_repo_name:
 if user_repo_name.endswith(git_file_suffix):
     user_repo_name = user_repo_name[:-len(git_file_suffix)]
 
-print user_repo_name
 current_tag = None
 try:
     current_tag = check_output(['git', 'describe', '--tags', '--exact-match', '--abbrev=0'],
@@ -71,19 +71,32 @@ conn.request('POST', '/repos/%s/releases' % user_repo_name,
              headers={
                  'Accept': github_header_accept,
                  'Authorization': github_authorization_header,
-                 'Content-Type': 'application/json'
+                 'Content-Type': 'application/json',
+                 'User-Agent': github_header_user_agent
              })
 response = conn.getresponse()
+if response.status == 422:
+    conn = httplib.HTTPSConnection('api.github.com')
+    conn.request('GET', '/repos/%s/releases/tags/%s' % (user_repo_name, current_tag),
+                 headers={
+                     'Accept': github_header_accept,
+                     'Authorization': github_authorization_header,
+                     'User-Agent': github_header_user_agent
+                 })
+    response = conn.getresponse()
+
 response_values = json.loads(response.read())
 
 upload_url = urlparse.urlparse(re.sub('\{\?([\w\d_\-]+)\}', '', response_values['upload_url']))
-conn = httplib.HTTPSConnection(upload_url.hostname)
 for root, dirnames, filenames in os.walk(os.getcwd()):
     for filename in fnmatch.filter(filenames, '*.apk'):
+        conn = httplib.HTTPSConnection(upload_url.hostname)
         conn.request('POST', "%s?%s" % (upload_url.path, urllib.urlencode({'name': filename})),
-                     body=os.path.join(root, filename),
+                     body=open(os.path.join(root, filename), 'r'),
                      headers={
                          'Accept': github_header_accept,
                          'Authorization': github_authorization_header,
-                         'Content-Type': 'application/json'
+                         'Content-Type': 'application/json',
+                         'User-Agent': github_header_user_agent
                      })
+        print("Upload %s returned %d" % (filename, conn.getresponse().status))
