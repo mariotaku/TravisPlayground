@@ -37,7 +37,7 @@ elif repo_url.startswith(git_https_url_prefix):
     user_repo_name = repo_url[len(git_https_url_prefix):]
 
 if not user_repo_name:
-    print('Not a github repo, abort', file=sys.stderr)
+    print('Not a github repo (%s), abort' % repo_url, file=sys.stderr)
     exit(0)
 
 if user_repo_name.endswith(git_file_suffix):
