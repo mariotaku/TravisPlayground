@@ -20,12 +20,15 @@ android:
     # - sys-img-armeabi-v7a-android-19
     # - sys-img-x86-android-17
 
-script:
-  - ./gradlew build signing --stacktrace
-  - ./scripts/travis_upload_release_to_github.py
+script: ./gradlew build signing --stacktrace
+
+# whitelist
+branches:
+  only:
+    - master
 
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y python2.7
 
-# after_success: python ./scripts/travis_upload_release_to_github.py
+after_success: ./scripts/travis_upload_release_to_github.py
