@@ -25,7 +25,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if (signingConfigs.release.storeFile != null) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
@@ -41,6 +43,7 @@ def decodeKeyStoreFileFromBase64Env(String name) {
         fos.flush()
     } catch (IOException e) {
         e.printStackTrace()
+        return null
     } finally {
         if (fos != null) {
             fos.close()

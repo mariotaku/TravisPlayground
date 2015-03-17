@@ -43,7 +43,8 @@ if user_repo_name.endswith(git_file_suffix):
 print user_repo_name
 current_tag = None
 try:
-    current_tag = check_output(['git', 'describe'], stderr=DEVNULL)
+    current_tag = check_output(['git', 'describe', '--tags', '--exact-match', '--abbrev=0'],
+                               stderr=DEVNULL).splitlines()[0]
 except CalledProcessError:
     print('This commit doesn\'t have tag, abort')
     exit(0)
@@ -56,7 +57,7 @@ if not github_access_token:
 
 github_authorization_header = "token %s" % github_access_token
 
-print('Creating release for tag %s', current_tag)
+print('Creating release for tag %s' % current_tag)
 
 req_headers = {'Accept': github_header_accept}
 
@@ -78,7 +79,7 @@ response_values = json.loads(response.read())
 upload_url = urlparse.urlparse(re.sub('\{\?([\w\d_\-]+)\}', '', response_values['upload_url']))
 conn = httplib.HTTPSConnection(upload_url.hostname)
 for root, dirnames, filenames in os.walk(os.getcwd()):
-    for filename in fnmatch.filter(filenames, '*-release.apk'):
+    for filename in fnmatch.filter(filenames, '*.apk'):
         conn.request('POST', "%s?%s" % (upload_url.path, urllib.urlencode({'name': filename})),
                      body=os.path.join(root, filename),
                      headers={
