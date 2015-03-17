@@ -42,9 +42,6 @@ def decodeKeyStoreFileFromBase64Env(String name) {
         fos = new FileOutputStream(tempKeyStoreFile)
         fos.write(Base64.decodeBase64(keyStoreBase64))
         fos.flush()
-    } catch (IOException e) {
-        e.printStackTrace()
-        return null
     } finally {
         if (fos != null) {
             fos.close()
