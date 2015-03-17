@@ -54,6 +54,11 @@ try:
 except CalledProcessError:
     print('This commit doesn\'t have tag, abort', file=sys.stderr)
     exit(0)
+try:
+    current_tag_body = '\n'.join(
+        check_output(['git', 'show', '-s', '--format=%b', current_tag], stderr=DEVNULL).splitlines()[2:])
+except CalledProcessError:
+    current_tag_body = "Automatic upload for version %s" % current_tag
 
 github_access_token = getenv('GITHUB_ACCESS_TOKEN')
 
@@ -72,7 +77,7 @@ conn.request('POST', '/repos/%s/releases' % user_repo_name,
              body=json.dumps({
                  'tag_name': current_tag,
                  'name': "Version %s" % current_tag,
-                 'body': 'Build and uploaded by Travis'
+                 'body': current_tag_body
              }),
              headers={
                  'Accept': github_header_accept,
