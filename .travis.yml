@@ -1,29 +1,20 @@
 language: android
 android:
   components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
-    - platform-tools
-    - tools
-
-    # The BuildTools version used by your project
-    - build-tools-22.0.0
-
-    # The SDK version used to compile your project
-    - android-22
-
-    # Additional components
-    - extra-android-m2repository
-
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests
-    # - sys-img-armeabi-v7a-android-19
-    # - sys-img-x86-android-17
-
-script: ./gradlew build signing --stacktrace
-
+  - platform-tools
+  - tools
+  - build-tools-22.0.0
+  - android-22
+  - extra-android-m2repository
+script: "./gradlew build signing --stacktrace"
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y python2.7
-
-after_success: ./scripts/travis_upload_release_to_github.py
+- sudo apt-get update -qq
+- sudo apt-get install -y python2.7
+after_success: "./scripts/travis_upload_release_to_github.py"
+deploy:
+  provider: releases
+  api_key:
+    secure: VrJUjO5FmldnmyIMeWXNgQblBDu8FkrDWqo/0kJFpQvSqfSOxRiz4+wMUsbSp7SEsvdHQoQiVxctK5X9tdf7Z0PWidFV4BFud5oM64SiDklDOKRJADKiF3+axmrnk6BCcoF4AZugvW0/ShxSFJaahfQHKnTwnC2AmbV7b0HfYQA=
+  file: "*-release.apk"
+  on:
+    tags: true
