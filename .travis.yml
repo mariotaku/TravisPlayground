@@ -15,6 +15,7 @@ deploy:
   provider: releases
   api_key:
     secure: VrJUjO5FmldnmyIMeWXNgQblBDu8FkrDWqo/0kJFpQvSqfSOxRiz4+wMUsbSp7SEsvdHQoQiVxctK5X9tdf7Z0PWidFV4BFud5oM64SiDklDOKRJADKiF3+axmrnk6BCcoF4AZugvW0/ShxSFJaahfQHKnTwnC2AmbV7b0HfYQA=
-  file: "*-release.apk"
+  file_glob: true
+  file: "**/*-release.apk"
   on:
     tags: true
