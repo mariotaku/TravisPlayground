@@ -1,15 +1,27 @@
 language: android
 
+sudo: false
+dist: trusty
+
+jdk: oraclejdk8
+
 android:
   components:
-  - platform-tools
   - tools
-  - build-tools-23.0.2
-  - android-23
+  - build-tools-26.0.1
+  - android-26
 
-sudo: false
+addons:
+  apt:
+    packages:
+      - ruby
 
-script: "./gradlew build signing --stacktrace"
+install:
+  - gem install fastlane
+
+script:
+  - fastlane
+  - "./gradlew build signing --stacktrace"
 
 deploy:
   provider: releases
