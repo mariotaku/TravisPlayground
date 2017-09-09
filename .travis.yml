@@ -21,14 +21,16 @@ install:
   - which fastlane
 
 script:
-  - ./test_fastlane.sh
   - ./gradlew build signing --stacktrace
 
 deploy:
-  provider: releases
-  api_key:
-    secure: VrJUjO5FmldnmyIMeWXNgQblBDu8FkrDWqo/0kJFpQvSqfSOxRiz4+wMUsbSp7SEsvdHQoQiVxctK5X9tdf7Z0PWidFV4BFud5oM64SiDklDOKRJADKiF3+axmrnk6BCcoF4AZugvW0/ShxSFJaahfQHKnTwnC2AmbV7b0HfYQA=
-  file_glob: true
-  file: "**/*-release.apk"
-  on:
-    tags: true
+  - provider: releases
+    api_key:
+      secure: VrJUjO5FmldnmyIMeWXNgQblBDu8FkrDWqo/0kJFpQvSqfSOxRiz4+wMUsbSp7SEsvdHQoQiVxctK5X9tdf7Z0PWidFV4BFud5oM64SiDklDOKRJADKiF3+axmrnk6BCcoF4AZugvW0/ShxSFJaahfQHKnTwnC2AmbV7b0HfYQA=
+    file_glob: true
+    file: "**/*-release.apk"
+    on:
+      tags: true
+  # Publish to Google Play store
+  - provider: script
+    script: ./test_fastlane.sh
