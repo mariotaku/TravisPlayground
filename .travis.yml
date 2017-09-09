@@ -25,9 +25,8 @@ script:
   - ./gradlew build
 
 deploy:
+  skip_cleanup: true
   - provider: script
-    skip_cleanup: true
     script: find . -name '*.apk'
   - provider: script
-  skip_cleanup: true
     script: ./test_fastlane.sh
