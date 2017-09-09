@@ -17,7 +17,7 @@ addons:
       - ruby
 
 install:
-  - gem install fastlane
+  - rvm default exec gem install fastlane
   - which fastlane
   - echo $PATH
 
