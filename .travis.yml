@@ -22,7 +22,7 @@ install:
   - echo $PATH
 
 script:
-  - ./gradlew build signing --stacktrace
+  - ./gradlew build
 
 deploy:
   - provider: script
