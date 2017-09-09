@@ -18,6 +18,7 @@ addons:
 
 install:
   - gem install fastlane
+  - which fastlane
 
 script:
   - fastlane
