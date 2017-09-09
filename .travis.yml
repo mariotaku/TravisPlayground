@@ -19,6 +19,7 @@ addons:
 install:
   - gem install fastlane
   - which fastlane
+  - echo $PATH
 
 script:
   - ./gradlew build signing --stacktrace

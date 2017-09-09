@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo $PATH
+
 fastlane --version
 
 set -o allexport
