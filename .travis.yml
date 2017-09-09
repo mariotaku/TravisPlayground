@@ -21,8 +21,8 @@ install:
   - which fastlane
 
 script:
-  - fastlane
-  - "./gradlew build signing --stacktrace"
+  - ./test_fastlane.sh
+  - ./gradlew build signing --stacktrace
 
 deploy:
   provider: releases
