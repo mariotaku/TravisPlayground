@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #https://docs.travis-ci.com/user/deployment/script/#Ruby-version
-rvm use default
+rvm default
 
 echo $PATH
 
